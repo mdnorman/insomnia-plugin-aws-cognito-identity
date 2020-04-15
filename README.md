@@ -1,10 +1,9 @@
 # insomnia-plugin-aws-cognito-token
-Insomnia plugin for AWS Cognito allowing you to fetch the JWT Token automatically and inject the token in the `Authorization` header.
-
-Note: version 0.10.0 changed the Tags order, you may have to reorder your Tags value.
+Insomnia plugin for AWS Cognito Identity allowing you to generate temporary
+credentials automatically and inject them into `AWS IAM v4` Auth.
 
 ## NPM
-[https://www.npmjs.com/package/insomnia-plugin-aws-cognito-token](https://www.npmjs.com/package/insomnia-plugin-aws-cognito-token)
+[insomnia-plugin-aws-cognito-identity](https://www.npmjs.com/package/insomnia-plugin-aws-cognito-identity)
 
 ## Insomnia
 [Insomnia](https://support.insomnia.rest/) is a free cross-platform desktop application that takes the pain out of interacting with HTTP-based APIs. 
@@ -12,20 +11,25 @@ Note: version 0.10.0 changed the Tags order, you may have to reorder your Tags v
 ## Plugin
 [Insomian Plugin API](https://support.insomnia.rest/article/26-plugins) support an Asynchronous API perfect form performing AWS Cognito Authentication before doing any request to AppSync for example
 
-## Install
-![Install](https://github.com/syl20lego/insomnia-plugin-aws-cognito-token/raw/master/images/Install.png)
+## Install the Plugin
+![Install](images/plugins.png)
 
 ## Usage
 
-### Environment
+### AWS IAM v4 Auth
 
-![Environment](https://github.com/syl20lego/insomnia-plugin-aws-cognito-token/raw/master/images/Add_environment.png)
+![Select AWS IAM v4 Auth](images/aws-auth-select.png)
 
-### Add Plugin's data
+![AWS Auth Screen - Blank](images/aws-auth-screen.png)
 
-![Form](https://github.com/syl20lego/insomnia-plugin-aws-cognito-token/raw/master/images/Plugin_form.png)
+![AWS Auth Screen - Pick Cognito](images/aws-auth-screen-cognito.png)
 
-### Request Header
+### From the environment
 
-![Header](https://github.com/syl20lego/insomnia-plugin-aws-cognito-token/raw/master/images/Authorization_header.png)
+![Environment](images/environment-cognito.png)
 
+### Add Identity data
+
+![Form](images/cognito-identity-config.png)
+
+NOTE: Be sure to choose the correct `CredentialType` for each field.
