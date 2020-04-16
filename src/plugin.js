@@ -71,8 +71,8 @@ const validCredentials = (credentials) => {
   return now < credentials.expireTime;
 };
 
-const loadCredentials = async (context, key) => {
-  const credentialsJson = await context.store.getItem(key);
+const loadCredentials = async (store, key) => {
+  const credentialsJson = await store.getItem(key);
   try {
     const credentials = credentialsJson && JSON.parse(credentialsJson);
 
@@ -87,21 +87,18 @@ const loadCredentials = async (context, key) => {
     }
   } catch (e) {
     console.error('Error loading credentials:', e);
-    context.store.removeItem(key);
+    store.removeItem(key);
   }
 
   return null;
 };
 
-const saveCredentials = (context, key, { accessKeyId, secretAccessKey, sessionToken, expireTime }) =>
-  context.store.setItem(
-    key,
-    JSON.stringify({ accessKeyId, secretAccessKey, sessionToken, expireTime: expireTime.valueOf() }),
-  );
+const saveCredentials = (store, key, { accessKeyId, secretAccessKey, sessionToken, expireTime }) =>
+  store.setItem(key, JSON.stringify({ accessKeyId, secretAccessKey, sessionToken, expireTime: expireTime.valueOf() }));
 
 // Main run function
 const run = async (
-  context,
+  { store },
   Username,
   Password,
   UserPoolId,
@@ -133,7 +130,7 @@ const run = async (
   }
 
   const key = [Username, Password, UserPoolId, ClientId, IdentityPoolId, CognitoRegion].join('::');
-  const credentials = await loadCredentials(context, key);
+  const credentials = await loadCredentials(store, key);
   if (credentials) {
     // JWT token is still valid, reuse the credentials
     return credentials[CredentialType];
@@ -149,12 +146,12 @@ const run = async (
       IdentityPoolId,
     });
     const newCredentials = await getCredentials(token, { UserPoolId, IdentityPoolId, CognitoRegion });
-    await saveCredentials(context, key, newCredentials);
+    await saveCredentials(store, key, newCredentials);
 
     return newCredentials[CredentialType];
   } catch (error) {
     console.error(error.message);
-    await saveCredentials(context, key, { error: error.message });
+    await saveCredentials(store, key, { error: error.message });
     throw error.message;
   }
 };
